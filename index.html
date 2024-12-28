@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MergeBot - Hikaye Oluşturucu</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .input-area {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>MergeBot'a Hoş Geldiniz! 📖🤖</h1>
+    <p>Haydi birlikte bir hikaye yazalım!</p>
+    
+    <div class="input-area">
+        <input type="text" id="sentence" placeholder="Hikayenizi buraya yazın...">
+        <button onclick="generateImage()">Resim Oluştur</button>
+    </div>
+    
+    <div id="result"></div>
+
+    <script>
+        async function generateImage() {
+            const sentence = document.getElementById('sentence').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = "Resminiz oluşturuluyor... ⏳";
+            
+            try {
+                const response = await fetch('/generate_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ sentence: sentence })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <p>${data.message}</p>
+                        <img src="${data.image_url}" alt="Oluşturulan resim">
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<p class="error">${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<p class="error">Bir hata oluştu! Lütfen tekrar deneyin.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+flask==2.0.1
+Pillow==8.4.0
+diffusers==0.11.1
+torch==1.10.0
+python-dotenv==0.19.0
+transformers==4.15.0
+zeyrek==0.1.2  
